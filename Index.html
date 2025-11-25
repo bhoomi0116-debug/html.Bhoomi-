@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhoomi Nalawade</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font family --><style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Background is handled by the #floating-shapes container now */
+        }
+
+        /* --- Custom Styles for Floating Background Shapes (Layer 1 - Deepest, now static) --- */
+        #floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10; /* Ensure it's behind content */
+            overflow: hidden;
+            background-color: #fefce8; /* Soft Cream/Yellowish-Beige for Earth theme */
+        }
+
+        .shape {
+            position: absolute;
+            display: block;
+            /* Base shape color: Earthy Green (Transparent) */
+            background: rgba(21, 128, 61, 0.4); 
+            /* Removed animation, this layer is now static */
+            z-index: -9; 
+            border-radius: 12px;
+            opacity: 0.5; /* Ensure static shapes are visible */
+        }
+
+        /* --- Custom Styles for Floating Background Shapes (Layer 2 - Above Layer 1, still moving) --- */
+        #floating-shapes-layer-2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -8; /* Slightly higher z-index than the first layer, still behind content */
+            overflow: hidden;
+        }
+
+        .shape-layer-2 {
+            position: absolute;
+            display: block;
+            /* Color: Use primary-dark (Very Dark Earthy Green) with higher transparency */
+            background: rgba(5, 46, 22, 0.3); 
+            animation: animate-layer-2 30s linear infinite; /* This layer remains animated */
+            bottom: -200px;
+            z-index: -7; 
+            border-radius: 50%; /* Start as circles for different look */
+        }
+
+        /* Define keyframes for floating animation (Layer 2: Slower, less opacity, larger shapes) */
+        @keyframes animate-layer-2 {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0; /* Start invisible */
+                border-radius: 50%;
+            }
+            10% {
+                opacity: 0.5; /* Become visible */
+            }
+            90% {
+                opacity: 0.2; /* Stay subtle */
+            }
+            100% {
+                transform: translateY(-110vh) rotate(540deg);
+                opacity: 0; /* Fade out completely at the top */
+                border-radius: 10%; 
+            }
+        }
+        
+        /* Individual Shape properties for variance - Layer 1 (Static) */
+        /* Removed animation properties (delay/duration) for the static layer */
+        .shape:nth-child(1) { left: 25%; width: 80px; height: 80px; background: rgba(21, 128, 61, 0.6); top: 10%; } 
+        .shape:nth-child(2) { left: 10%; width: 20px; height: 20px; background: rgba(77, 124, 15, 0.6); top: 50%; } 
+        .shape:nth-child(3) { left: 70%; width: 20px; height: 20px; top: 80%; }
+        .shape:nth-child(4) { left: 40%; width: 60px; height: 60px; background: rgba(21, 128, 61, 0.7); top: 25%; }
+        .shape:nth-child(5) { left: 65%; width: 20px; height: 20px; background: rgba(77, 124, 15, 0.5); top: 60%; } 
+        .shape:nth-child(6) { left: 75%; width: 110px; height: 110px; top: 15%; }
+        .shape:nth-child(7) { left: 35%; width: 150px; height: 150px; background: rgba(21, 128, 61, 0.5); top: 70%; }
+        .shape:nth-child(8) { left: 50%; width: 25px; height: 25px; background: rgba(77, 124, 15, 0.7); top: 40%; } 
+        .shape:nth-child(9) { left: 20%; width: 15px; height: 15px; top: 90%; }
+        .shape:nth-child(10) { left: 85%; width: 150px; height: 150px; background: rgba(21, 128, 61, 0.6); top: 5%; }
+
+        /* Individual Shape properties for variance - Layer 2 (Moving) */
+        .shape-layer-2:nth-child(1) { left: 15%; width: 100px; height: 100px; animation-delay: 5s; animation-duration: 25s; }
+        .shape-layer-2:nth-child(2) { left: 55%; width: 30px; height: 30px; animation-delay: 1s; animation-duration: 18s; }
+        .shape-layer-2:nth-child(3) { left: 85%; width: 50px; height: 50px; animation-delay: 8s; animation-duration: 35s; }
+        .shape-layer-2:nth-child(4) { left: 5%; width: 120px; height: 120px; animation-delay: 15s; animation-duration: 40s; }
+        .shape-layer-2:nth-child(5) { left: 45%; width: 70px; height: 70px; animation-delay: 12s; animation-duration: 22s; }
+        .shape-layer-2:nth-child(6) { left: 90%; width: 80px; height: 80px; animation-delay: 2s; animation-duration: 15s; }
+        .shape-layer-2:nth-child(7) { left: 30%; width: 15px; height: 15px; animation-delay: 0s; animation-duration: 20s; }
+        .shape-layer-2:nth-child(8) { left: 70%; width: 90px; height: 90px; animation-delay: 6s; animation-duration: 30s; }
+        .shape-layer-2:nth-child(9) { left: 40%; width: 40px; height: 40px; animation-delay: 10s; animation-duration: 13s; }
+        .shape-layer-2:nth-child(10) { left: 80%; width: 10px; height: 10px; animation-delay: 3s; animation-duration: 17s; }
+
+
+        /* --- Custom Styles for Animated Subtitle (The following are no longer used but kept for historical context) --- */
+        /*
+        .word-rotator {
+            display: inline-block;
+            height: 1.2em;
+            overflow: hidden;
+            vertical-align: top;
+            line-height: 1.2;
+            position: relative;
+        }
+
+        .word-rotator-list {
+            display: block;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .word-rotator-list li {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            animation-name: swipe-in-out;
+            animation-duration: 20s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            line-height: 1.2;
+            height: 1.2em;
+            font-weight: 800;
+            width: max-content; 
+        }
+
+        .word-rotator-list li:nth-child(1) { animation-delay: 0s; }
+        .word-rotator-list li:nth-child(2) { animation-delay: 5s; }
+        .word-rotator-list li:nth-child(3) { animation-delay: 10s; }
+        .word-rotator-list li:nth-child(4) { animation-delay: 15s; }
+
+        @keyframes swipe-in-out {
+            0% { opacity: 0; transform: translateX(-100%); }
+            2% { opacity: 1; transform: translateX(0); }
+            23% { opacity: 1; transform: translateX(0); }
+            25% { opacity: 0; transform: translateX(100%); }
+            26%, 100% { opacity: 0; transform: translateX(-100%); }
+        }
+        */
+        
+        /* Custom classes for the message box animation */
+        .message-box {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .message-box.hidden {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+        }
+        .message-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // All Green Earth Theme Palette
+                        'primary': '#166534', /* Green 800 - Forest Green */
+                        'primary-dark': '#052e16', /* Green 950 - Very Dark Earthy Green */
+                        // Olive/Lime Accent for contrast
+                        'accent': '#4d7c0f', /* Lime 700 - Olive Green */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <!-- Floating Shapes Background Container (Layer 1 - Deepest, now static) --><div id="floating-shapes">
+        <!-- Ten individual shape elements for the animation --><span class="shape"></span>
+        <span class="shape"></span>
+        <span class="shape"></span>
+        <span class="shape"></span>
+        <span class="shape"></span>
+        <span class="shape"></span>
+        <span class="shape"></span>
+        <span class="shape"></span>
+        <span class="shape"></span>
+        <span class="shape"></span>
+    </div>
+
+    <!-- Floating Shapes Background Container (Layer 2 - Slightly above Layer 1, still moving) --><div id="floating-shapes-layer-2">
+        <!-- Ten individual shape elements for the animation --><span class="shape-layer-2"></span>
+        <span class="shape-layer-2"></span>
+        <span class="shape-layer-2"></span>
+        <span class="shape-layer-2"></span>
+        <span class="shape-layer-2"></span>
+        <span class="shape-layer-2"></span>
+        <span class="shape-layer-2"></span>
+        <span class="shape-layer-2"></span>
+        <span class="shape-layer-2"></span>
+        <span class="shape-layer-2"></span>
+    </div>
+    
+    <!-- SUCCESS MESSAGE BOX --><div id="success-message" class="message-box hidden fixed top-5 left-1/2 transform -translate-x-1/2 z-50 p-4 rounded-xl shadow-2xl bg-green-600 text-white font-semibold flex items-center space-x-3 max-w-sm w-full md:w-auto" role="alert">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>Message successfully prepared!</span>
+        <button onclick="document.getElementById('success-message').classList.add('hidden'); document.getElementById('success-message').classList.remove('visible');" class="ml-auto text-white opacity-75 hover:opacity-100 transition duration-150">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+    </div>
+
+    <!-- Header & Navigation --><header class="sticky top-0 z-50 bg-green-100 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Name --><a href="#" class="text-2xl font-bold text-primary tracking-tight">
+                    Bhoomi <span class="text-accent">Nalawade</span>
+                </a>
+                
+                <!-- Desktop Nav Links --><nav class="hidden md:flex space-x-8 items-center">
+                    <a href="#about" class="text-gray-600 hover:text-primary transition duration-150">About</a>
+                    <a href="#skills" class="text-gray-600 hover:text-primary transition duration-150">Skills</a>
+                    <a href="#projects" class="text-gray-600 hover:text-primary transition duration-150">Projects</a>
+                    <!-- LET'S COLLAB IN A BOX --><a href="#contact" class="px-3 py-1 bg-primary text-white rounded-full font-semibold shadow-md hover:bg-primary-dark transition duration-150 transform hover:scale-105">
+                        Let's Collab
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Button --><button class="md:hidden p-2 text-gray-600 hover:text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary" 
+                        id="mobile-menu-button">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu --><div id="mobile-menu" class="hidden md:hidden bg-green-100 shadow-lg pb-2">
+            <a href="#about" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">About</a>
+            <a href="#skills" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Skills</a>
+            <a href="#projects" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Projects</a>
+            <div class="px-4 py-2">
+                <a href="#contact" class="block w-full text-center px-4 py-2 bg-primary text-white rounded-lg font-semibold shadow-lg hover:bg-primary-dark transition duration-150">
+                    Let's Collab
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content --><main>
+        
+        <!-- Hero Section - Titles now visible and separated by pipes or line breaks --><section id="hero" class="py-20 md:py-32 bg-green-50 text-center sm:text-left relative z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-10">
+                <!-- Text Content --><div class="sm:w-3/5">
+                    <p class="text-xl font-medium text-accent mb-3">Hello, I'm</p>
+                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-primary-dark mb-6 leading-tight">
+                        <span class="text-primary-dark">Bhoomi Nalawade,</span> <br>
+                        
+                        <!-- Visible Titles Block -->
+                        <span class="text-3xl sm:text-4xl text-primary font-extrabold">
+                            Creative Developer | Web Designer <br class="sm:hidden">
+                            Logo Designer | Digital Artist
+                        </span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-600 mb-10 max-w-lg">
+                        I build beautifully responsive, modern web applications and design intuitive user experiences that deliver real value.
+                    </p>
+                    <!-- CTAs --><div class="flex justify-center sm:justify-start space-x-4">
+                        <a href="#projects" class="px-8 py-3 bg-primary text-white font-semibold rounded-xl shadow-xl hover:bg-primary-dark transition duration-300 transform hover:scale-105">
+                            View My Work
+                        </a>
+                        <a href="#" class="px-8 py-3 border border-primary text-primary font-semibold rounded-xl shadow-xl hover:bg-green-50 transition duration-300 transform hover:scale-105">
+                            Download CV
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Image Placeholder: Updated to Green theme --><div class="sm:w-2/5 flex justify-center">
+                    <div class="w-64 h-64 sm:w-80 sm:h-80 bg-green-200 rounded-full flex items-center justify-center shadow-2xl border-4 border-primary-dark">
+                        <span class="text-primary-dark text-xl font-bold">Your Photo Here</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About & Skills Section --><section id="about" class="py-16 md:py-24 bg-green-50 relative z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4 text-primary-dark">
+                    About Me
+                </h2>
+                <p class="text-center text-xl text-gray-500 mb-12 max-w-3xl mx-auto">
+                    A summary of my professional journey and core technical expertise.
+                </p>
+
+                <div class="md:flex gap-10">
+                    <!-- About Text --><div class="md:w-1/2 mb-10 md:mb-0 p-6 bg-green-100 rounded-2xl shadow-lg border border-green-200">
+                        <h3 class="text-2xl font-semibold text-primary mb-4">My Philosophy</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            I specialize in taking complex problems and translating them into simple, efficient, and user-friendly digital solutions. With 5+ years of experience in full-stack development, I am proficient in modern JavaScript frameworks and focused on delivering high-quality code that is both scalable and maintainable. I thrive in collaborative environments and am passionate about continuous learning.
+                        </p>
+                    </div>
+
+                    <!-- Skills Showcase --><div id="skills" class="md:w-1/2 p-6 bg-green-100 rounded-2xl shadow-lg border border-green-200">
+                        <h3 class="2xl font-semibold text-accent mb-4">Technical Toolkit</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-3 py-1 bg-accent text-white text-sm font-medium rounded-full shadow-md">React.js</span>
+                            <span class="px-3 py-1 bg-accent text-white text-sm font-medium rounded-full shadow-md">Next.js</span>
+                            <span class="px-3 py-1 bg-accent text-white text-sm font-medium rounded-full shadow-md">Tailwind CSS</span>
+                            <span class="px-3 py-1 bg-accent text-white text-sm font-medium rounded-full shadow-md">Node.js</span>
+                            <span class="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full shadow-md">MongoDB</span>
+                            <span class="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full shadow-md">Python/Django</span>
+                            <span class="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full shadow-md">Figma</span>
+                            <span class="px-3 py-1 bg-accent text-white text-sm font-medium rounded-full shadow-md">REST APIs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section --><section id="projects" class="py-16 md:py-24 bg-green-50 relative z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-primary-dark">
+                    Featured Projects
+                </h2>
+
+                <!-- Projects Grid - Updated placeholder backgrounds to Earth tones --><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Project 1 --><div class="bg-green-100 rounded-2xl shadow-xl overflow-hidden border border-green-200">
+                        <div class="w-full h-48 bg-primary-dark flex items-center justify-center">
+                            <span class="text-white font-bold text-3xl">Coming Soon!!</span>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 --><div class="bg-green-100 rounded-2xl shadow-xl overflow-hidden border border-green-200">
+                        <div class="w-full h-48 bg-accent flex items-center justify-center">
+                            <span class="text-white font-bold text-3xl">Coming Soon!!</span>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 --><div class="bg-green-100 rounded-2xl shadow-xl overflow-hidden border border-green-200">
+                        <div class="w-full h-48 bg-primary flex items-center justify-center">
+                            <span class="text-white font-bold text-3xl">Coming Soon!!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form Section --><section id="contact" class="py-16 md:py-20 bg-primary relative z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+                    Get In Touch
+                </h2>
+                <p class="text-xl text-green-100 mb-10 max-w-2xl mx-auto">
+                    I'm currently available for freelance projects and new roles. Drop me a message below!
+                </p>
+
+                <!-- Contact Form --><form id="contact-form" action="#" class="max-w-xl mx-auto space-y-6 text-left">
+                    
+                    <input type="text" id="contact-name" name="name" placeholder="Your Name" required 
+                           class="w-full p-4 rounded-xl border-2 border-green-300 focus:border-accent focus:ring-accent transition duration-150 text-gray-800 shadow-lg"
+                           aria-label="Your Name">
+
+                    <input type="email" id="contact-email" name="email_id" placeholder="Your Email ID" required 
+                           class="w-full p-4 rounded-xl border-2 border-green-300 focus:border-accent focus:ring-accent transition duration-150 text-gray-800 shadow-lg"
+                           aria-label="Your Email ID">
+
+                    <textarea id="contact-message" name="message" rows="6" placeholder="Your Message" required 
+                              class="w-full p-4 rounded-xl border-2 border-green-300 focus:border-accent focus:ring-accent transition duration-150 resize-none text-gray-800 shadow-lg"
+                              aria-label="Your Message"></textarea>
+                    
+                    <button type="submit" 
+                            class="w-full py-4 bg-accent text-white font-bold rounded-xl shadow-2xl hover:bg-lime-800 transition duration-300 transform hover:scale-[1.01] uppercase tracking-wider">
+                        Send Message
+                    </button>
+                </form>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer --><footer class="bg-primary-dark text-white py-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-green-300 text-sm mb-4 md:mb-0">
+                &copy; 2025 Bhoomi Nalawade. Built with <span class="text-red-400">&hearts;</span> and Tailwind CSS.
+            </p>
+            <div class="flex space-x-4 text-green-300">
+                <a href="#" class="hover:text-accent transition duration-150">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.163 6.837 9.489.5.093.682-.217.682-.483 0-.237-.008-.865-.013-1.697-2.782.605-3.369-1.343-3.369-1.343-.455-1.157-1.114-1.464-1.114-1.464-.91-.62.07-.607.07-.607 1.004.07 1.53.99 1.53.99.892 1.527 2.34.93 2.91.71.09-.55.349-.93.635-1.143-2.22-.252-4.555-1.11-4.555-4.945 0-1.09.39-1.988 1.03-2.68a3.61 3.61 0 01.095-2.653s.836-.268 2.744 1.026a9.564 9.564 0 015.01-.137c1.908-1.294 2.744-1.026 2.744-1.026.183.67.29 1.455.275 2.215.64.692 1.03 1.59 1.03 2.68 0 3.844-2.339 4.686-4.566 4.936.359.307.678.917.678 1.846 0 1.334-.012 2.416-.012 2.75 0 .269.18.577.688.484C21.148 20.18 24 16.446 24 12.017 24 6.484 19.522 2 14 2h-2z" clip-rule="evenodd"></path></svg>
+                </a>
+                <a href="#" class="hover:text-accent transition duration-150">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.364-4-3.136-4 0v5.604h-3v-11h3v1.782c1.392-2.58 7-2.735 7 2.315v6.903z"></path></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu Toggle and Contact Form Handling --><script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const contactForm = document.getElementById('contact-form');
+            const successMessage = document.getElementById('success-message');
+
+            // 1. Mobile Menu Toggle
+            if (button && menu) {
+                button.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                });
+                
+                // Close menu when a link is clicked
+                menu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // 2. Contact Form Handler (Simulated Submission)
+            if (contactForm && successMessage) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Simulate successful form submission
+                    // In a real application, you would send data to a server here.
+                    
+                    // Show success message
+                    successMessage.classList.remove('hidden');
+                    successMessage.classList.add('visible');
+                    
+                    // Hide message after 5 seconds
+                    setTimeout(() => {
+                        successMessage.classList.remove('visible');
+                        successMessage.classList.add('hidden');
+                    }, 5000);
+
+                    // Clear form (optional)
+                    contactForm.reset();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
